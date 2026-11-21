@@ -55,6 +55,10 @@ function finishLogin(result) {
   if (user.location) localStorage.setItem('streamsphereLocation', user.location);
   localStorage.setItem('streamsphereThemePreference', user.theme || 'auto');
 
+  // 👉 ADD THIS EXACT LINE:
+  const userPlan = (user.plan || 'free').toLowerCase().trim();
+  localStorage.setItem('streamsphereProfilePlan', userPlan);
+
   const usernameInput = document.getElementById('username');
   if (usernameInput) usernameInput.value = user.name;
   const emailInput = document.getElementById('email');
@@ -70,7 +74,9 @@ function finishLogin(result) {
     if (loginDialog.open) loginDialog.close();
     loginDialog.classList.remove('is-open');
   }, 1200);
-    if (typeof updatePlansUI === 'function') updatePlansUI();
+
+  // Update UI immediately
+  if (typeof updatePlansUI === 'function') updatePlansUI();
   if (typeof updateDownloadButtonState === 'function') updateDownloadButtonState();
   if (typeof renderProfileDownloads === 'function') renderProfileDownloads();
 }
@@ -124,7 +130,7 @@ loginForm?.addEventListener('submit', async event => {
       return;
     }
 
-        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
     const password = document.getElementById('loginPassword').value;
     const region = loginRegion();
 
@@ -166,14 +172,13 @@ loginForm?.addEventListener('submit', async event => {
       }
 
       const displayName = localUser ? localUser.name : email.split('@')[0];
+      const savedPlan = localUser?.plan || 'free';
       finishLogin({
         token: 'local_token_' + Date.now(),
-        user: { name: displayName, email: email, theme: 'auto' }
+        user: { name: displayName, email: email, theme: 'auto', plan: savedPlan }
       });
     }
   } finally {
     submitButton.disabled = false;
   }
 });
-
-

@@ -9,35 +9,37 @@ const PLAN_AMOUNTS = {
   gold:   { name: 'Gold',   price: 299 }
 };
 
-// 1. Highlight only the current active plan on the page
 function updatePlansUI() {
   const currentPlan = (
     localStorage.getItem('streamsphereProfilePlan') ||
     (typeof profilePlanKey !== 'undefined' ? localStorage.getItem(profilePlanKey) : null) ||
     'free'
-  ).toLowerCase();
+  ).toLowerCase().trim();
 
-  // Update profile select dropdown if present
   const profilePlanSelect = document.getElementById('profilePlan');
   if (profilePlanSelect) {
     profilePlanSelect.value = currentPlan;
   }
 
-  // Update plan cards on the Plans page
+  // Loop through all 4 plan cards (Free, Bronze, Silver, Gold)
   document.querySelectorAll('.plan-card').forEach(card => {
     const btn = card.querySelector('button[data-plan]');
     if (!btn) return;
-    const plan = (btn.dataset.plan || '').toLowerCase();
+    const plan = (btn.dataset.plan || '').toLowerCase().trim();
 
     if (plan === currentPlan) {
-      card.style.border = '2px solid #4cd137';
+      // 👉 Green outline box on the active plan
+      card.style.border = '2px solid #22c55e';
+      card.style.boxShadow = '0 0 15px rgba(34, 197, 94, 0.35)';
       btn.textContent = 'Current plan ✓';
       btn.disabled = true;
-      btn.style.backgroundColor = '#4cd137';
+      btn.style.backgroundColor = '#22c55e';
       btn.style.color = '#ffffff';
       btn.style.cursor = 'default';
     } else {
+      // 👉 Remove green outline from all other cards
       card.style.border = '';
+      card.style.boxShadow = '';
       btn.textContent = (plan === 'free' ? 'Downgrade' : 'Upgrade');
       btn.disabled = false;
       btn.style.backgroundColor = '';
@@ -46,9 +48,14 @@ function updatePlansUI() {
     }
   });
 
-  if (plansStatus && currentPlan !== 'free') {
-    plansStatus.textContent = 'Active plan: ' + currentPlan.toUpperCase();
-    plansStatus.style.color = '#4cd137';
+  if (plansStatus) {
+    if (currentPlan !== 'free') {
+      plansStatus.textContent = 'Active plan: ' + currentPlan.toUpperCase();
+      plansStatus.style.color = '#22c55e';
+    } else {
+      plansStatus.textContent = 'Upgrade with Razorpay test checkout. Your plan updates after payment verification.';
+      plansStatus.style.color = '';
+    }
   }
 }
 
@@ -184,14 +191,53 @@ async function applyPlanChange(newPlan, paymentId) {
 
 window.applyPlanChange = applyPlanChange;
 
-// Navigation and buttons
-document.getElementById('plansNavLink')?.addEventListener('click', event => {
+// Sync logged-in user's plan directly from the server database
+async function syncPlanWithDatabase() {
+  const token = localStorage.getItem('streamsphereAuthToken');
+  if (!token) return;
+  try {
+    const res = await fetch('/api/profile', {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'success' && data.profile && data.profile.plan) {
+      const dbPlan = data.profile.plan.toLowerCase();
+      localStorage.setItem('streamsphereProfilePlan', dbPlan);
+      if (typeof profilePlanKey !== 'undefined') {
+        localStorage.setItem(profilePlanKey, dbPlan);
+      }
+      updatePlansUI();
+    }
+  } catch (err) {
+    console.warn('Database plan sync note:', err);
+  }
+}
+
+document.getElementById('plansNavLink')?.addEventListener('click', async event => {
   event.preventDefault();
+
+  // Fetch the fresh plan from backend database
+  const token = localStorage.getItem('streamsphereAuthToken');
+  if (token) {
+    try {
+      const res = await fetch('/api/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (data.status === 'success' && data.profile?.plan) {
+        localStorage.setItem('streamsphereProfilePlan', data.profile.plan.toLowerCase());
+      }
+    } catch (e) {
+      console.warn('Could not sync plan with database:', e);
+    }
+  }
+
   updatePlansUI();
   if (typeof showDestinationPage === 'function') {
     showDestinationPage(document.getElementById('plansPage'));
   }
 });
+
 
 document.getElementById('closePlans')?.addEventListener('click', () => {
   if (typeof showMainVideoPage === 'function') {
@@ -210,4 +256,5 @@ document.addEventListener('DOMContentLoaded', updatePlansUI);
 updatePlansUI();
 
 
+window.updatePlansUI = updatePlansUI;
 window.updatePlansUI = updatePlansUI;

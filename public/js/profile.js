@@ -22,12 +22,13 @@ function getProfileDownloads() {
 }
 
 // 1. Delete download option
-function deleteProfileDownload(videoId, title) {
+async function deleteProfileDownload(videoId, title) {
   const currentVideoId = (videoId || '').trim();
   const currentTitle = (title || '').trim().toLowerCase();
   const key = getActiveUserDownloadsKey();
   const downloads = getProfileDownloads();
 
+  // 1. Remove from local browser storage
   const updatedDownloads = downloads.filter(d => {
     const dId = (d.videoId || '').trim();
     const dTitle = (d.title || '').trim().toLowerCase();
@@ -39,17 +40,16 @@ function deleteProfileDownload(videoId, title) {
   localStorage.setItem(key, JSON.stringify(updatedDownloads));
   renderProfileDownloads(updatedDownloads);
 
-  // Reset player button from "Downloaded ✓" back to "Download"
+  // 2. Reset player button from "Downloaded ✓" back to "Download"
   if (typeof updateDownloadButtonState === 'function') {
     updateDownloadButtonState();
   }
 
-  // Background sync to delete from server database if available
-  try {
-    const formAction = document.getElementById('commentForm')?.action;
-    if (formAction && !formAction.startsWith('file://')) {
-      const userEmail = (localStorage.getItem('streamsphereEmail') || '').trim().toLowerCase();
-      fetch(formAction, {
+  // 3. Delete permanently from SQLite database on server
+  const userEmail = (localStorage.getItem('streamsphereEmail') || '').trim().toLowerCase();
+  if (userEmail) {
+    try {
+      await fetch('/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -58,9 +58,11 @@ function deleteProfileDownload(videoId, title) {
           videoId: currentVideoId,
           videoTitle: title || ''
         })
-      }).catch(err => console.warn('Delete download server sync:', err));
+      });
+    } catch (err) {
+      console.warn('Delete download server sync error:', err);
     }
-  } catch (e) {}
+  }
 }
 
 window.deleteProfileDownload = deleteProfileDownload;
@@ -262,11 +264,11 @@ async function loadDownloadHistory() {
       })
     });
     const data = await response.json();
-    if (response.ok && data.status === 'success' && Array.isArray(data.history)) {
+          if (response.ok && data.status === 'success' && Array.isArray(data.history)) {
+      const key = getActiveUserDownloadsKey();
+      localStorage.setItem(key, JSON.stringify(data.history)); // 👈 Syncs local storage
       renderProfileDownloads(data.history);
-    } else {
-      throw new Error(data.message || 'Unable to load download history.');
-    }
+      }  
   } catch (error) {
     console.warn('Unable to load download history from server, using local history:', error);
     renderProfileDownloads();

@@ -5,17 +5,9 @@ document.getElementById('commentForm').addEventListener('submit', async function
     return;
   }
 
-  const voiceClipKeyInput = document.getElementById('voiceClipKey');
+    const voiceClipKeyInput = document.getElementById('voiceClipKey');
   const commentGifUrlInput = document.getElementById('commentGifUrl');
-  if (this.dataset.keepVoiceClip !== 'true') {
-    if (voiceClipKeyInput) voiceClipKeyInput.value = '';
-    if (commentGifUrlInput) commentGifUrlInput.value = '';
-    const recordingStatus = document.getElementById('recordingStatus');
-    if (recordingStatus) recordingStatus.textContent = '';
-    const voicePreview = document.getElementById('voicePreview');
-    if (voicePreview) voicePreview.style.display = 'none';
-  }
-  delete this.dataset.keepVoiceClip;
+
 
   this.dataset.submitting = 'true';
   const submitBtn = document.getElementById('submitBtn');
@@ -30,10 +22,15 @@ document.getElementById('commentForm').addEventListener('submit', async function
   const statusMsg = document.getElementById('statusMsg');
   const commentText = document.getElementById('commentText');
   const username = document.getElementById('username').value.trim() || 'Guest User';
-  const voiceClipKey = voiceClipKeyInput.value;
-  const gifUrl = commentGifUrlInput.value;
-  const containsSpoiler = document.getElementById('commentSpoilerToggle').checked;
-  const comment = commentText.value.trim() || (voiceClipKey ? '[Voice comment]' : gifUrl ? '[GIF]' : '');
+    const voicePreview = document.getElementById('voiceCommentPreview') || document.getElementById('voicePreview');
+  const hasVoiceRecording = (voiceClipKeyInput && voiceClipKeyInput.value) || (voicePreview && !voicePreview.hidden && voicePreview.src);
+  const voiceClipKey = (voiceClipKeyInput && voiceClipKeyInput.value) || (hasVoiceRecording ? ('voice_' + Date.now()) : '');
+  const gifUrl = commentGifUrlInput ? commentGifUrlInput.value : '';
+  const containsSpoiler = document.getElementById('commentSpoilerToggle')?.checked || false;
+
+  // 👉 Detects voice recording even if textarea text is empty:
+  const comment = commentText.value.trim() || (hasVoiceRecording ? '🎤 [Voice comment]' : gifUrl ? '🖼️ [GIF]' : '');
+
   const showLocation = document.getElementById('showLocationToggle').checked;
   const sourceLocation = showLocation ? localStorage.getItem('streamsphereLocation') || '' : '';
   const publicRegion = getPublicCommentRegion(sourceLocation);
@@ -113,9 +110,17 @@ document.getElementById('commentForm').addEventListener('submit', async function
   statusMsg.textContent = '✓ Comment posted.';
   statusMsg.style.display = 'block';
 
-  // 3. Clear the input box
-  this.dataset.keepVoiceClip = 'true';
+    // 3. Clear inputs & voice preview after posting
   this.reset();
+  if (voiceClipKeyInput) voiceClipKeyInput.value = '';
+  if (commentGifUrlInput) commentGifUrlInput.value = '';
+  if (voicePreview) {
+    voicePreview.hidden = true;
+    voicePreview.removeAttribute('src');
+    voicePreview.load?.();
+  }
+  const voiceStatus = document.getElementById('voiceCommentStatus');
+  if (voiceStatus) voiceStatus.textContent = '';
   commentText.focus();
 
   // 4. Hide the green banner after 3 seconds
