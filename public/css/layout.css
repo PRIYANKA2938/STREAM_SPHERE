@@ -1,0 +1,10 @@
+  /* ---------- Main Layout ---------- */
+  main.page{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 357px;
+    gap:80px;
+    max-width:1280px;
+    margin:0 auto;
+    padding:48px 24px;
+  }
+  main.page[hidden]{display:none;}

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamSphere — The Celestial Anomaly, Episode 4</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/overflow-menu.css">
+<link rel="stylesheet" href="css/dialogs.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/buttons.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/player.css">
+<link rel="stylesheet" href="css/video-info.css">
+<link rel="stylesheet" href="css/channel.css">
+<link rel="stylesheet" href="css/comments.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- ================= TOP NAVIGATION ================= -->
+<header class="topnav">
+  <div class="nav-left">
+    <a href="#" class="brand">StreamSphere</a>
+    <div class="personalized-greeting" id="personalizedGreeting" aria-live="polite">
+      <strong>Welcome back</strong>
+      <span>Finding your local experience...</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" class="active" data-view="main">Home</a></li>
+      <li><a href="#" id="watchPartyNavLink">Watch Party</a></li>
+      <li><a href="#" id="downloadsNavLink">Downloads</a></li>
+      <li><a href="#" id="likedHistoryNavLink">Liked Videos</a></li>
+      <li><a href="#" id="historyNavLink">Watch History</a></li>
+      <li><a href="#" id="yourChannelNavLink">StreamSphere</a></li>
+      <li><a href="#" id="plansNavLink">Plans</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" aria-label="Search" title="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+    </button>
+    <button class="icon-btn" id="notificationsButton" aria-label="Notifications" title="Notifications" aria-expanded="false" aria-controls="notificationsPanel" style="width:16px;height:20px;">
+      <svg width="16" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+      <span class="notification-count" id="notificationCount" hidden></span>
+    </button>
+    <button class="btn btn-outline" id="loginButton" type="button">Login</button>
+    <button class="btn btn-primary" id="signUpButton" type="button">Sign Up</button>
+    <button class="avatar-ring" id="profileButton" type="button" aria-label="Open profile" title="Profile">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+        <circle cx="16" cy="10" r="5"/>
+        <path d="M 4 28 C 4 20 10 16 16 16 C 22 16 28 20 28 28" stroke="currentColor" stroke-width="2" fill="none"/>
+      </svg>
+    </button>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <section class="notifications-panel" id="notificationsPanel" aria-labelledby="notificationsTitle" hidden>
+    <h2 id="notificationsTitle">Notifications</h2>
+    <div class="notifications-list" id="notificationsList"></div>
+  </section>
+</header>
+
+<dialog class="report-dialog" id="signUpDialog" aria-labelledby="signUpDialogTitle">
+  <form class="report-dialog-content" id="signUpForm">
+    <h2 id="signUpDialogTitle">Create your account</h2>
+    <p>Use your email and a secure password to sign up.</p>
+    <label>Display name<input id="signUpName" type="text" autocomplete="name" maxlength="40" required></label>
+    <label>Email address<input id="signUpEmail" type="email" autocomplete="email" required></label>
+    <label>Password<div class="password-field"><input id="signUpPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*\d.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="At least 8 characters, 2 numbers, and 1 special character" required><button class="password-toggle" type="button" data-password-target="signUpPassword" aria-label="Show password" title="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></button></div></label>
+    <label>Confirm password<div class="password-field"><input id="signUpConfirmPassword" type="password" autocomplete="new-password" minlength="8" required><button class="password-toggle" type="button" data-password-target="signUpConfirmPassword" aria-label="Show confirm password" title="Show confirm password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></button></div></label>
+    <p class="profile-status" id="signUpStatus" aria-live="polite"></p>
+    <div class="report-dialog-actions">
+      <button type="button" class="report-dialog-cancel" id="cancelSignUp">Cancel</button>
+      <button type="submit" class="report-dialog-submit">Create account</button>
+    </div>
+  </form>
+</dialog>
+
+<section class="destination-page" id="historyPage" aria-labelledby="historyDialogTitle" hidden>
+  <div class="history-content">
+    <h2 id="historyDialogTitle">Watch History</h2>
+    <div class="history-list" id="historyList"></div>
+    <button class="plans-close" id="closeHistory" type="button">Back to Home</button>
+  </div>
+</section>
+
+<section class="destination-page" id="likedHistoryPage" aria-labelledby="likedHistoryDialogTitle" hidden>
+  <div class="history-content">
+    <h2 id="likedHistoryDialogTitle">Liked Video History</h2>
+    <div class="history-list" id="likedHistoryList"></div>
+    <button class="plans-close" id="closeLikedHistory" type="button">Back to Home</button>
+  </div>
+</section>
+
+<dialog class="report-dialog" id="loginDialog" aria-labelledby="loginDialogTitle">
+  <form class="report-dialog-content" id="loginForm">
+    <h2 id="loginDialogTitle">Log in</h2>
+    <p id="loginDescription">Use the email and password from your StreamSphere account.</p>
+    <div id="loginCredentials">
+      <label>Email address<input id="loginEmail" type="email" autocomplete="email" required></label>
+      <label>Password<div class="password-field"><input id="loginPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" data-password-target="loginPassword" aria-label="Show password" title="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></button></div></label>
+    </div>
+    <div id="loginOtpStep" hidden>
+      <p>We sent a 6-digit code to <strong id="loginOtpDestination"></strong>.</p>
+      <label>Email verification code<input id="loginOtpCode" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" disabled required></label>
+      <button type="button" id="resendLoginOtp">Resend code</button>
+    </div>
+    <p class="profile-status" id="loginStatus" aria-live="polite"></p>
+    <div class="report-dialog-actions">
+      <button type="button" class="report-dialog-cancel" id="cancelLogin">Cancel</button>
+      <button type="submit" class="report-dialog-submit" id="loginSubmit">Log in</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="report-dialog" id="reportDialog" aria-labelledby="reportDialogTitle">
+  <form method="dialog" class="report-dialog-content" id="reportForm">
+    <h2 id="reportDialogTitle">Report this video</h2>
+    <p>Tell us what is wrong with this video.</p>
+    <label>
+      Reason
+      <select id="reportReason" required>
+        <option value="Inappropriate content">Inappropriate content</option>
+        <option value="Spam or scam">Spam or scam</option>
+        <option value="Harassment or abuse">Harassment or abuse</option>
+        <option value="Copyright issue">Copyright issue</option>
+        <option value="Other">Other</option>
+      </select>
+    </label>
+    <label>
+      Details (optional)
+      <textarea id="reportDetails" placeholder="Add more information"></textarea>
+    </label>
+    <div class="report-dialog-actions">
+      <button type="button" class="report-dialog-cancel" id="cancelReport">Cancel</button>
+      <button type="submit" class="report-dialog-submit">Submit report</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="report-dialog" id="shareDialog" aria-labelledby="shareDialogTitle">
+  <div class="report-dialog-content" style="max-width: 420px;">
+    <h2 id="shareDialogTitle">Share this video</h2>
+    <p>Share this video with friends or copy the link.</p>
+    
+    <div style="display: flex; gap: 10px; margin: 15px 0; justify-content: center; flex-wrap: wrap;">
+      <a id="shareWhatsApp" target="_blank" rel="noopener noreferrer" style="padding: 8px 14px; background: #25D366; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">WhatsApp</a>
+      <a id="shareTwitter" target="_blank" rel="noopener noreferrer" style="padding: 8px 14px; background: #1DA1F2; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">X (Twitter)</a>
+      <a id="shareFacebook" target="_blank" rel="noopener noreferrer" style="padding: 8px 14px; background: #4267B2; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">Facebook</a>
+      <a id="shareEmail" target="_blank" style="padding: 8px 14px; background: #EA4335; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">Email</a>
+    </div>
+
+    <label style="margin-top: 10px;">
+      Video Link
+      <div style="display: flex; gap: 8px; margin-top: 6px;">
+        <input id="shareLinkInput" type="text" readonly style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff;">
+        <button id="copyShareLinkBtn" type="button" class="report-dialog-submit" style="white-space: nowrap;">Copy</button>
+      </div>
+    </label>
+
+    <div class="report-dialog-actions" style="margin-top: 15px;">
+      <button type="button" class="report-dialog-cancel" id="closeShareDialog">Close</button>
+    </div>
+  </div>
+</dialog>
+
+
+<section class="destination-page" id="plansPage" aria-labelledby="plansDialogTitle" hidden>
+  <div class="plans-content">
+    <h2 id="plansDialogTitle">Choose your plan</h2>
+    <p id="plansStatus">Upgrade with Razorpay test checkout. Your plan updates after payment verification.</p>
+    <div class="plans-grid">
+      <article class="plan-card"><h3>Free</h3><strong>₹0</strong><span>1 download/day · 20 min watch time</span><button type="button" data-plan="free">Current plan</button></article>
+      <article class="plan-card"><h3>Bronze</h3><strong>₹99</strong><span>3 downloads/day · 2 hr watch time</span><button type="button" data-plan="bronze">Upgrade</button></article>
+      <article class="plan-card"><h3>Silver</h3><strong>₹199</strong><span>10 downloads/day · 5 hr watch time · ad-free</span><button type="button" data-plan="silver">Upgrade</button></article>
+      <article class="plan-card"><h3>Gold</h3><strong>₹299</strong><span>50 downloads/day · 24 hr watch time · ad-free</span><button type="button" data-plan="gold">Upgrade</button></article>
+    </div>
+    <button class="plans-close" id="closePlans" type="button">Back to Home</button>
+  </div>
+</section>
+
+<section class="destination-page" id="partyPage" aria-labelledby="partyDialogTitle" hidden>
+  <div class="party-content">
+    <h2 id="partyDialogTitle">Watch Party</h2>
+    <p>Create a room and invite friends. Playback controls stay synchronized for everyone in the room.</p>
+    <div class="party-room-row">
+      <input id="partyRoomLink" readonly aria-label="Watch party invite link">
+      <button id="copyPartyLink" type="button">Copy link</button>
+    </div>
+    <p class="party-status" id="partyStatus">No room is active.</p>
+    <div class="party-video-grid">
+      <video id="partyLocalVideo" autoplay muted playsinline aria-label="Your camera"></video>
+      <video id="partyRemoteVideo" autoplay playsinline aria-label="Friend camera"></video>
+    </div>
+    <div class="party-actions">
+      <button id="joinCall" type="button">Join video call</button>
+      <button id="togglePartyMute" class="party-secondary" type="button">Mute mic</button>
+      <button id="togglePartyCamera" class="party-secondary" type="button">Turn camera off</button>
+      <button id="shareScreen" class="party-secondary" type="button">Share screen</button>
+      <button id="leaveCall" class="party-secondary" type="button">Leave call</button>
+      <button id="togglePartyRecording" class="party-secondary" type="button">Record locally</button>
+    </div>
+    <ul class="party-participants" id="partyParticipants" aria-label="Participants"></ul>
+    <div class="party-chat">
+      <div class="party-messages" id="partyMessages" aria-live="polite"></div>
+      <form class="party-chat-row" id="partyChatForm">
+        <input id="partyChatInput" placeholder="Message the party..." autocomplete="off">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+    <button id="createPartyRoom" type="button">Create watch party</button>
+    <button id="joinPartyRoom" class="party-secondary" type="button">Join room from link</button>
+    <button id="closeParty" class="party-secondary" type="button">Back to Home</button>
+  </div>
+</section>
+
+<section class="destination-page" id="downloadsPage" aria-labelledby="downloadsPageTitle" hidden>
+  <div class="plans-content">
+    <h2 id="downloadsPageTitle">Downloads</h2>
+    <div class="download-list" id="downloadsPageList"></div>
+    <button class="plans-close" id="closeDownloads" type="button">Back to Home</button>
+  </div>
+</section>
+
+<dialog class="profile-dialog" id="profileDialog" aria-labelledby="profileDialogTitle">
+  <div class="profile-content">
+    <div class="profile-heading">
+      <h2 id="profileDialogTitle">Your Profile</h2>
+      <div class="profile-plan">
+        <span>Plan</span>
+        <select id="profilePlan" aria-label="Profile plan">
+  <option value="free">Free</option>
+  <option value="bronze">Bronze</option>
+  <option value="silver">Silver</option>
+  <option value="gold">Gold</option>
+</select>
+      </div>
+    </div>
+    <section class="profile-section" aria-labelledby="downloadsHeading">
+      <h3 id="downloadsHeading">Downloads</h3>
+      <div class="download-list" id="profileDownloads"></div>
+    </section>
+    <section class="profile-section" aria-labelledby="personalizationHeading">
+      <h3 id="personalizationHeading">Personalization & security</h3>
+      <div class="profile-settings">
+        <label>Theme
+          <select id="profileTheme" aria-label="Theme">
+            <option value="auto">Auto by IST login time</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label>Registered email
+          <input id="profileEmail" type="email" autocomplete="email" placeholder="you@example.com" readonly>
+        </label>
+        <label>Mobile number (optional)
+          <input id="profileMobile" type="tel" autocomplete="tel" placeholder="+91...">
+        </label>
+        <label>City / state
+          <input id="profileLocation" type="text" placeholder="City, State (optional)">
+        </label>
+      </div>
+      <p class="profile-status" id="profileSecurityStatus">New browsers/devices or changed sign-in regions require a code sent to your registered email. City/state is based on your saved profile location; precise location is not collected.</p>
+    </section>
+        <div class="profile-actions">
+      <button class="profile-close" id="logoutButton" type="button" style="background:#e50914;color:#ffffff;margin-right:auto;">Log out</button>
+      <button class="profile-close" id="closeProfile" type="button">Close</button>
+      <button class="profile-close" id="saveProfile" type="button">Save changes</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="page">
+
+  <!-- LEFT COLUMN -->
+  <div class="left-column">
+
+    <!-- Video Player -->
+    <div class="video-player" data-download-url="https://images-assets.nasa.gov/video/Apollo_11_Introduction_720p/Apollo_11_Introduction_720p~medium.mp4">
+      <video class="video-media" preload="metadata" src="https://images-assets.nasa.gov/video/Apollo_11_Introduction_720p/Apollo_11_Introduction_720p~medium.mp4" aria-label="Apollo 11 Mission Overview demo video">
+        <source src="https://images-assets.nasa.gov/video/Apollo_11_Introduction_720p/Apollo_11_Introduction_720p~medium.mp4" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+
+      <div class="video-control-bar" aria-label="Video controls">
+        <button class="video-play-toggle" id="videoPlayPause" type="button" aria-label="Play video" title="Play video">
+          <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21"></polygon></svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+        <button id="videoBack10" type="button" aria-label="Rewind 10 seconds" title="Rewind 10 seconds">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v6h6"></path><path d="M12 8v8l4 2"></path></svg>
+        </button>
+        <button id="videoForward10" type="button" aria-label="Skip forward 10 seconds" title="Skip forward 10 seconds">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v6h-6"></path><path d="M12 8v8l4 2"></path></svg>
+        </button>
+        <span class="video-time" id="videoTime">0:00 / 0:00</span>
+        <input class="video-seek" id="videoSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Video progress">
+        <button id="videoMute" type="button" aria-label="Mute video" title="Mute video">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="m15 9 5 6m0-6-5 6"></path></svg>
+        </button>
+        <input class="video-volume" id="videoVolume" type="range" min="0" max="1" value="1" step="0.05" aria-label="Volume">
+<button id="videoPrev" type="button" aria-label="Play previous video" title="Previous video">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2z"></path><path d="M19 20V4L7 12z"></path></svg>
+        </button>
+
+        <button id="videoNext" type="button" aria-label="Play next video" title="Next video">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4v16l12-8z"></path><path d="M19 4h2v16h-2z"></path></svg>
+        </button>
+        <button id="videoFullscreen" type="button" aria-label="Zoom in to full screen" title="Zoom in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5M10.5 7v7m-3.5-3.5h7"></path></svg>
+        </button>
+      </div>
+      <div class="video-loading" id="videoLoading" aria-live="polite">Loading video</div>
+      <div class="video-skip-hint left" id="skipBackHint">-10 seconds</div>
+      <div class="video-skip-hint right" id="skipForwardHint">+10 seconds</div>
+      <svg class="poster" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1c2b3c;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0d1c2d;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="1280" height="720" fill="url(#grad1)"/>
+        <circle cx="640" cy="360" r="150" fill="#3b82f6" opacity="0.3"/>
+        <circle cx="300" cy="200" r="100" fill="#0ff" opacity="0.2"/>
+      </svg>
+      <div class="overflow-menu">
+        <button class="overflow-btn" id="overflowButton" type="button" aria-label="More options" aria-expanded="false" aria-controls="overflowPanel" title="More options">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5" r="1.5"></circle>
+            <circle cx="12" cy="12" r="1.5"></circle>
+            <circle cx="12" cy="19" r="1.5"></circle>
+          </svg>
+        </button>
+        <div class="overflow-panel" id="overflowPanel" role="menu" aria-labelledby="overflowButton">
+          <button type="button" role="menuitem" data-video-action="share">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"></path>
+            </svg>
+            Share
+          </button>
+          <button type="button" role="menuitem" data-video-action="report">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 21V4m0 0c5-3 7 3 12 0v9c-5 3-7-3-12 0"></path>
+            </svg>
+            Report
+          </button>
+          <button type="button" role="menuitem" data-video-action="save">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-4-6 4V4z"></path>
+            </svg>
+            Save
+          </button>
+          <button type="button" role="menuitem" data-video-action="download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"></path>
+            </svg>
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Info -->
+    <section class="video-info">
+      <h1 class="video-title">The Celestial Anomaly - Episode 4</h1>
+      <div class="video-meta-row">
+        <span class="video-stats">1.2M views &bull; 2 days ago</span>
+        <div class="video-actions">
+          <button type="button" class="action video-reaction" data-video-reaction="like" aria-label="Like this video" aria-pressed="false">
+            <span class="reaction-symbol" aria-hidden="true">👍</span>
+            <span class="video-reaction-count" data-count-for="like">0</span>
+          </button>
+          <button type="button" class="action video-reaction" data-video-reaction="dislike" aria-label="Dislike this video" aria-pressed="false">
+            <span class="reaction-symbol" aria-hidden="true">👎</span>
+            <span class="video-reaction-count" data-count-for="dislike">0</span>
+          </button>
+          <span class="video-reaction-status" id="videoReactionStatus" role="status" aria-live="polite"></span>
+          <button type="button" class="action share-video-action" aria-label="Share this video">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            Share
+          </button>
+          <button type="button" class="action save-video-action" aria-label="Save this video">
+            <svg width="19" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5m15 0l-3 3m3-3l-3-3"></path>
+            </svg>
+            Save
+          </button>
+          <button type="button" class="action download-video-action" aria-label="Download this video">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"></path>
+            </svg>
+            Download
+          </button>
+        </div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-logo" aria-hidden="true">SS</div>
+        <div class="channel-details">
+          <span class="channel-name">StreamSphere Originals</span>
+          <span class="channel-subs">2.4M subscribers</span>
+        </div>
+        <button class="subscribe-button" id="subscribeButton" type="button" aria-pressed="false">Subscribe</button>
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="comments-section">
+      <div class="comments-header">
+        <h2 id="commentsCount">Comments &middot; 0</h2>
+        <div class="comments-view-controls">
+          <select id="commentSort" aria-label="Sort comments">
+            <option value="relevant">Most Relevant</option>
+            <option value="newest">Newest</option>
+            <option value="liked">Most Liked</option>
+          </select>
+          <select id="commentLanguageFilter" aria-label="Filter comments by language">
+            <option value="all">All languages</option>
+            <option value="en">English</option>
+            <option value="ta">Tamil</option>
+            <option value="hi">Hindi</option>
+            <option value="es">Spanish</option>
+            <option value="other">Other</option>
+          </select>
+          <select id="commentBookmarkFilter" aria-label="Filter bookmarked comments">
+            <option value="all">All comments</option>
+            <option value="bookmarked">Bookmarked</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="comment-review-panel" id="commentReviewPanel" aria-labelledby="commentReviewTitle" hidden>
+        <h3 id="commentReviewTitle">Comments awaiting review</h3>
+        <div class="comment-analytics" id="commentAnalytics"></div>
+        <div id="commentReviewList"></div>
+      </section>
+
+      <!-- Add comment form -->
+<form id="commentForm" class="add-comment" method="POST" action="/api">
+
+
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="var(--accent-blue)">
+            <circle cx="20" cy="12" r="6"/>
+            <path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36"/>
+          </svg>
+        </div>
+        <div class="comment-input-wrap">
+          <textarea class="comment-box" id="commentText" name="comment" placeholder="Add a comment..." required></textarea>
+          <div class="mention-suggestions" id="mentionSuggestions" hidden></div>
+          <span class="comment-character-count" id="commentCharacterCount">0 / 5,000</span>
+          <input type="hidden" name="username" id="username" value="Guest User">
+          <input type="hidden" name="email" id="email" value="">
+          <input type="hidden" name="location" id="location" value="">
+          <input type="hidden" name="showLocation" id="showLocation" value="false">
+          <input type="hidden" name="language" id="language" value="en">
+          <input type="hidden" name="videoId" id="videoId" value="celestial-anomaly-ep4">
+          <input type="hidden" name="spoiler" id="commentContainsSpoiler" value="false">
+          <input type="hidden" name="gifUrl" id="commentGifUrl" value="">
+          <input type="hidden" name="voiceClipKey" id="voiceClipKey" value="">
+          <div class="comment-composer-tools">
+            <button type="button" class="comment-tool-btn" id="voiceCommentButton" aria-label="Record voice comment">🎤 Voice</button>
+            <button type="button" class="comment-tool-btn" id="gifStickerButton" aria-expanded="false" aria-controls="gifStickerPanel">GIF / Sticker</button>
+            <label class="spoiler-option"><input type="checkbox" id="commentSpoilerToggle"> Contains spoilers</label>
+          </div>
+          <div class="voice-status" id="voiceCommentStatus" aria-live="polite"></div>
+          <audio id="voiceCommentPreview" controls hidden></audio>
+          <section class="comment-composer-panel" id="gifStickerPanel" hidden>
+            <div class="sticker-options" aria-label="Choose a sticker">
+              <button type="button" data-sticker="🎬" aria-label="Add movie sticker">🎬</button>
+              <button type="button" data-sticker="🍿" aria-label="Add popcorn sticker">🍿</button>
+              <button type="button" data-sticker="🚀" aria-label="Add rocket sticker">🚀</button>
+              <button type="button" data-sticker="✨" aria-label="Add sparkle sticker">✨</button>
+              <button type="button" data-sticker="👏" aria-label="Add applause sticker">👏</button>
+            </div>
+            <div class="party-room-row">
+              <input id="commentGifInput" type="url" placeholder="Paste a GIF URL from a trusted source">
+              <button class="comment-tool-btn" type="button" id="insertGifButton">Add GIF</button>
+            </div>
+          </section>
+          
+          <div class="comment-toolbar">
+            <label class="location-option"><input type="checkbox" id="showLocationToggle"> Show my region</label>
+            <label class="comment-language-option">Comment language
+              <select class="lang-select" id="commentLanguageSelector" aria-label="Select the language used in your comment">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ml">Malayalam</option>
+                <option value="kn">Kannada</option>
+                <option value="bn">Bengali</option>
+                <option value="mr">Marathi</option>
+                <option value="gu">Gujarati</option>
+                <option value="pa">Punjabi</option>
+                <option value="ur">Urdu</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="ar">Arabic</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="zh-CN">Chinese (Simplified)</option>
+              </select>
+            </label>
+            <div class="comment-buttons">
+              <button type="button" class="btn-cancel" onclick="document.getElementById('commentForm').reset();document.getElementById('statusMsg').style.display='none';">Cancel</button>
+              <button type="submit" class="btn-post" id="submitBtn">Comment</button>
+            </div>
+          </div>
+          <div class="form-status" id="statusMsg"></div>
+        </div>
+      </form>
+
+      <!-- Comments list -->
+      <div class="comments-list" id="commentsList">
+
+        <!-- Creator comment -->
+        <article class="comment-card">
+          <div class="comment-body">
+            <div class="comment-avatar creator">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="var(--accent-blue)">
+                <circle cx="20" cy="12" r="6"/>
+                <path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36"/>
+              </svg>
+            </div>
+            <div class="comment-main">
+              <div class="comment-headline">
+                <span class="badge">StreamSphere Official</span>
+                <span class="timestamp">2 days ago</span>
+              </div>
+              <p class="comment-text">Welcome to episode 4! We hid a subtle easter egg in the background during the hangar scene at 14:22. Did anyone catch it? Let us know below! 👇</p>
+              <div class="interaction-bar">
+                <span class="action">
+                  <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M1 6.5c0-2 1.5-3.5 3.5-3.5S8 4.5 8 6.5s-1.5 3.5-3.5 3.5"/>
+                  </svg>
+                  3.2K
+                </span>
+                <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                  <path d="M12 5.5c0-2-1.5-3.5-3.5-3.5S5 3.5 5 5.5s1.5 3.5 3.5 3.5"/>
+                </svg>
+                <button type="button" class="reply-btn">Reply</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Multilingual comment -->
+        <article class="comment-card">
+          <div class="comment-body">
+            <div class="comment-avatar">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="#8b5cf6">
+                <circle cx="20" cy="12" r="6"/>
+                <path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36"/>
+              </svg>
+            </div>
+            <div class="comment-main">
+              <div class="comment-headline">
+                <span class="username">RajeshKumar</span>
+                <span class="location">Location hidden</span>
+                <span class="timestamp dim">&bull; 2 hours ago</span>
+              </div>
+              <p class="comment-text" lang="ta">இந்த எபிசோட் மிகவும் அருமையாக இருந்தது! சிஜிஐ (CGI) காட்சிகள் நம்பமுடியாத அளவிற்கு தத்ரூபமாக உள்ளன.</p>
+              <div class="translation-box" data-translation-box>
+                <div class="translation-row">
+                  <span>🌐 Detected: Tamil</span>
+                  <button type="button" data-original-toggle>Show Original</button>
+                </div>
+                <p class="translation-quote" data-translation-text>"This episode was absolutely fantastic! The CGI scenes are incredibly realistic."</p>
+              </div>
+              <div class="interaction-bar">
+                <span class="action">
+                  <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M1 6.5c0-2 1.5-3.5 3.5-3.5S8 4.5 8 6.5s-1.5 3.5-3.5 3.5"/>
+                  </svg>
+                  142
+                </span>
+                <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                  <path d="M12 5.5c0-2-1.5-3.5-3.5-3.5S5 3.5 5 5.5s1.5 3.5 3.5 3.5"/>
+                </svg>
+                <button type="button" class="reply-btn">Reply</button>
+              </div>
+              <button type="button" class="replies-toggle">
+                <svg width="9" height="5.55" viewBox="0 0 9 6" fill="none" stroke="currentColor" stroke-width="1">
+                  <polyline points="1 1 4.5 5 8 1"></polyline>
+                </svg>
+                View 12 replies
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Suspicious comment -->
+        <article class="comment-card suspicious">
+          <div class="comment-body">
+            <div class="avatar-placeholder">U</div>
+            <div class="comment-main">
+              <div class="comment-headline">
+                <span class="username">UnknownUser99</span>
+                <span class="timestamp dim">&bull; 5 hours ago</span>
+                <span class="flag-suspicious">Suspicious</span>
+              </div>
+              <p class="comment-text italic">Click here to download the full season for free! [Link removed by moderator]</p>
+              <div class="interaction-bar">
+                <span class="action">
+                  <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M1 6.5c0-2 1.5-3.5 3.5-3.5S8 4.5 8 6.5s-1.5 3.5-3.5 3.5"/>
+                  </svg>
+                  0
+                </span>
+                <svg width="12.25" height="11.7" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1">
+                  <path d="M12 5.5c0-2-1.5-3.5-3.5-3.5S5 3.5 5 5.5s1.5 3.5 3.5 3.5"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <button type="button" class="load-more">
+        Load More Comments
+        <svg width="12" height="7.4" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="1 1 6 6 11 1"></polyline>
+        </svg>
+      </button>
+    </section>
+  </div>
+
+  <!-- RIGHT COLUMN / SIDEBAR -->
+  <aside class="sidebar">
+    <h3>Up Next</h3>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="160" height="96" fill="url(#grad2)"/>
+          <text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Episode 5</text>
+        </svg>
+        <span class="reco-duration">45:12</span>
+      </div>
+      <div class="reco-info">
+        <h4>The Celestial Anomaly - Episode 5: Descent</h4>
+        <span class="reco-channel">StreamSphere Originals</span>
+        <span class="reco-meta">980K views &bull; New</span>
+      </div>
+    </div>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#4c1d95;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="160" height="96" fill="url(#grad3)"/>
+          <text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Finale</text>
+        </svg>
+        <span class="reco-duration">52:08</span>
+      </div>
+      <div class="reco-info">
+        <h4>Neon Horizons - Season Finale</h4>
+        <span class="reco-channel">Sci-Fi Hub</span>
+        <span class="reco-meta">2.4M views &bull; 1 week ago</span>
+      </div>
+    </div>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#164e63;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="160" height="96" fill="url(#grad4)"/>
+          <text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Behind The Code</text>
+        </svg>
+        <span class="reco-duration">28:45</span>
+      </div>
+      <div class="reco-info">
+        <h4>Behind the Code: Artificial Sentience</h4>
+        <span class="reco-channel">Tech Docs</span>
+        <span class="reco-meta">450K views &bull; 3 days ago</span>
+      </div>
+    </div>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1"/><stop offset="100%" style="stop-color:#78350f;stop-opacity:1"/></linearGradient></defs>
+          <rect width="160" height="96" fill="url(#grad5)"/><text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Origins</text>
+        </svg>
+        <span class="reco-duration">39:20</span>
+      </div>
+      <div class="reco-info">
+        <h4>Starfall Origins: First Contact</h4>
+        <span class="reco-channel">Orbit Stories</span>
+        <span class="reco-meta">720K views &bull; 4 days ago</span>
+      </div>
+    </div>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"/><stop offset="100%" style="stop-color:#14532d;stop-opacity:1"/></linearGradient></defs>
+          <rect width="160" height="96" fill="url(#grad6)"/><text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Signal</text>
+        </svg>
+        <span class="reco-duration">31:06</span>
+      </div>
+      <div class="reco-info">
+        <h4>Signal Lost: The Deep Space Mystery</h4>
+        <span class="reco-channel">Night Shift Docs</span>
+        <span class="reco-meta">612K views &bull; 5 days ago</span>
+      </div>
+    </div>
+
+    <div class="reco-item">
+      <div class="reco-thumb">
+        <svg viewBox="0 0 160 96" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="grad7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ec4899;stop-opacity:1"/><stop offset="100%" style="stop-color:#831843;stop-opacity:1"/></linearGradient></defs>
+          <rect width="160" height="96" fill="url(#grad7)"/><text x="80" y="48" text-anchor="middle" dy="0.3em" fill="white" font-size="12" font-weight="bold">Archive</text>
+        </svg>
+        <span class="reco-duration">48:15</span>
+      </div>
+      <div class="reco-info">
+        <h4>The Archive Door: A Timeline Unlocked</h4>
+        <span class="reco-channel">Future Frame</span>
+        <span class="reco-meta">1.1M views &bull; 1 week ago</span>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<section id="channelPage" class="channel-page" aria-label="Channel page" hidden>
+  <div class="channel-banner">
+    <div class="channel-banner-content">
+      <div class="channel-banner-meta">
+        <div class="channel-banner-avatar" aria-hidden="true">SS</div>
+        <div class="channel-banner-text">
+          <h1>StreamSphere</h1>
+          <p>2.4M subscribers • 412 videos • Sci-fi stories and cinematic releases</p>
+        </div>
+      </div>
+      <div class="channel-header-actions">
+        <button type="button" class="channel-back-btn" id="channelBackButton">Back to video</button>
+        <button class="subscribe-button" id="channelSubscribeButton" type="button" aria-pressed="false">Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="channel-nav" aria-label="Channel sections">
+    <a href="#channelHomePanel" class="active" data-channel-tab="home" aria-controls="channelHomePanel" aria-current="page">Home</a>
+    <a href="#channelVideosPanel" data-channel-tab="videos" aria-controls="channelVideosPanel">Videos</a>
+    <a href="#channelShortsPanel" data-channel-tab="shorts" aria-controls="channelShortsPanel">Shorts</a>
+    <a href="#channelLivePanel" data-channel-tab="live" aria-controls="channelLivePanel">Live</a>
+    <a href="#channelCommunityPanel" data-channel-tab="community" aria-controls="channelCommunityPanel">Community</a>
+    <a href="#channelAboutPanel" data-channel-tab="about" aria-controls="channelAboutPanel">About</a>
+  </nav>
+
+  <section class="channel-tab-panel" id="channelHomePanel" aria-labelledby="channelHomeTitle">
+    <div class="channel-home-feature">
+      <div>
+        <h2 id="channelHomeTitle">Stories from beyond the stars.</h2>
+        <p>Watch cinematic science-fiction originals, behind-the-scenes stories, and new releases from StreamSphere Originals.</p>
+      </div>
+      <a href="#channelVideosPanel" data-channel-tab="videos" aria-controls="channelVideosPanel">View videos</a>
+    </div>
+  </section>
+
+  <section class="channel-tab-panel" id="channelVideosPanel" aria-labelledby="channelVideosTitle" hidden>
+    <h2 class="channel-panel-heading" id="channelVideosTitle">Videos</h2>
+    <div class="channel-grid">
+      <article class="channel-video-card">
+        <div class="channel-thumb"><button class="channel-play-button" type="button" data-channel-video data-video-title="The Celestial Anomaly - Episode 4" aria-label="Play The Celestial Anomaly - Episode 4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><span>45:12</span></div>
+        <div class="channel-video-card-body">
+          <h3>The Celestial Anomaly - Episode 4</h3>
+          <p>Watch the latest release and discover the hidden mystery.</p>
+          <div class="meta"><span>1.2M views</span><span>2 days ago</span></div>
+        </div>
+      </article>
+
+      <article class="channel-video-card">
+        <div class="channel-thumb" style="background:linear-gradient(135deg,#8b5cf6,#312e81);"><button class="channel-play-button" type="button" data-channel-video data-video-title="Neon Horizons - Season Finale" aria-label="Play Neon Horizons - Season Finale"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><span>52:08</span></div>
+        <div class="channel-video-card-body">
+          <h3>Neon Horizons - Season Finale</h3>
+          <p>The final chapter of the deep-space epic is here.</p>
+          <div class="meta"><span>2.4M views</span><span>1 week ago</span></div>
+        </div>
+      </article>
+
+      <article class="channel-video-card">
+        <div class="channel-thumb" style="background:linear-gradient(135deg,#06b6d4,#0f172a);"><button class="channel-play-button" type="button" data-channel-video data-video-title="Behind the Code: Artificial Sentience" aria-label="Play Behind the Code: Artificial Sentience"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><span>28:45</span></div>
+        <div class="channel-video-card-body">
+          <h3>Behind the Code: Artificial Sentience</h3>
+          <p>Creators explain how the visual language was built.</p>
+          <div class="meta"><span>450K views</span><span>3 days ago</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="channel-tab-panel" id="channelShortsPanel" aria-labelledby="channelShortsTitle" hidden>
+    <h2 class="channel-panel-heading" id="channelShortsTitle">Shorts</h2>
+    <div class="channel-shorts-grid">
+      <article class="channel-short-card"><div class="channel-short-poster">A signal from the dark<button class="channel-play-button" type="button" data-channel-video data-video-title="One message changed everything" aria-label="Play One message changed everything"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button></div><h3>One message changed everything</h3><p>842K views</p></article>
+      <article class="channel-short-card"><div class="channel-short-poster">Neon Horizons<button class="channel-play-button" type="button" data-channel-video data-video-title="The last 10 seconds" aria-label="Play The last 10 seconds"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button></div><h3>The last 10 seconds</h3><p>1.1M views</p></article>
+      <article class="channel-short-card"><div class="channel-short-poster">Behind the scene<button class="channel-play-button" type="button" data-channel-video data-video-title="Building an alien world" aria-label="Play Building an alien world"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button></div><h3>Building an alien world</h3><p>392K views</p></article>
+    </div>
+  </section>
+
+  <section class="channel-tab-panel" id="channelLivePanel" aria-labelledby="channelLiveTitle" hidden>
+    <h2 class="channel-panel-heading" id="channelLiveTitle">Live</h2>
+    <div class="channel-live-panel">
+      <span class="channel-live-label">Live schedule</span>
+      <h2>No streams live right now</h2>
+      <p>Check back for premiere discussions, creator Q&amp;As, and live events from StreamSphere Originals.</p>
+    </div>
+  </section>
+
+  <section class="channel-tab-panel" id="channelCommunityPanel" aria-labelledby="channelCommunityTitle" hidden>
+    <h2 class="channel-panel-heading" id="channelCommunityTitle">Community</h2>
+    <div class="channel-community-list">
+      <article class="channel-post"><time>2 days ago</time><p>The Celestial Anomaly is out now. What clue did you spot first?</p></article>
+      <article class="channel-post"><time>1 week ago</time><p>We are building something new for the Neon Horizons universe. More soon.</p></article>
+    </div>
+  </section>
+
+  <section class="channel-tab-panel" id="channelAboutPanel" aria-labelledby="channelAboutTitle" hidden>
+    <div class="channel-about-panel">
+      <h2 id="channelAboutTitle">About StreamSphere Originals</h2>
+      <p>Original science-fiction films and series, made for curious minds. Explore new worlds, meet the people behind them, and follow every story as it unfolds.</p>
+      <dl class="channel-about-details">
+        <div><dt>Subscribers</dt><dd>2.4M</dd></div>
+        <div><dt>Videos</dt><dd>412</dd></div>
+        <div><dt>Joined</dt><dd>May 2018</dd></div>
+        <div><dt>Location</dt><dd>Worldwide</dd></div>
+      </dl>
+    </div>
+  </section>
+</section>
+
+<section class="channel-watch-page" id="channelWatchPage" aria-label="Video playback page" hidden>
+  <div class="channel-watch-header">
+    <button type="button" class="channel-back-btn" id="channelWatchBackButton">Back to channel</button>
+    <span>Now playing</span>
+  </div>
+  <section class="channel-playback" id="channelPlayback" aria-label="Channel video player">
+    <h2 id="channelPlaybackTitle"></h2>
+    <video id="channelVideoPlayer" controls playsinline preload="metadata" aria-label="Selected channel video">
+      <source type="video/mp4">
+      Your browser does not support video playback.
+    </video>
+    <p class="channel-playback-status" id="channelPlaybackStatus" aria-live="polite"></p>
+  </section>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>StreamSphere</h3>
+      <p>&copy; 2024 StreamSphere Inc. All rights reserved.</p>
+    </div>
+    <div class="footer-col">
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Contact Support</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<!-- ================= SCRIPTS (load order matters) ================= -->
+<script src="js/state.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/auth-signup.js"></script>
+<script src="js/auth-login.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/channel.js"></script>
+<script src="js/theme-init.js"></script>
+<script src="js/comment-moderation-rules.js"></script>
+<script src="js/voice-clips.js"></script>
+<script src="js/comment-composer-tools.js"></script>
+<script src="js/comment-form.js"></script>
+<script src="js/time-utils.js"></script>
+<script src="js/comments-translate.js"></script>
+<script src="js/comments-report.js"></script>
+<script src="js/comments-replies.js"></script>
+<script src="js/comments-manage.js"></script>
+<script src="js/comments-emoji.js"></script>
+<script src="js/comments-render.js"></script>
+<script src="js/comments-extras.js"></script>
+<script src="js/comments-dashboard.js"></script>
+<script src="js/comments-loading.js"></script>
+<script src="js/language-selector.js"></script>
+<script src="js/shared-refs.js"></script>
+<script src="js/history.js"></script>
+<script src="js/subscribe.js"></script>
+<script src="js/plans.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/video-reactions.js"></script>
+<script src="js/video-actions.js"></script>
+<script src="js/video-overflow-report.js"></script>
+<script src="js/video-player-refs.js"></script>
+<script src="js/watch-party.js"></script>
+<script src="js/recommendations.js"></script>
+<script src="js/video-player.js"></script>
+<script src="js/comments-sort-filter.js"></script>
+<script src="js/comments-reactions.js"></script>
+<script src="js/nav-menu.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

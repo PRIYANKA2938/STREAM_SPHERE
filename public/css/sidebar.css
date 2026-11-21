@@ -1,0 +1,18 @@
+  /* ---------- Sidebar ---------- */
+  .sidebar{display:flex;flex-direction:column;gap:24px;}
+  .sidebar h3{font-size:24px;font-weight:600;letter-spacing:-0.24px;color:var(--heading);margin:0 0 8px;}
+  .reco-item{display:flex;gap:12px;cursor:pointer;transition:transform 0.2s;}
+  .reco-item.is-next-selected{outline:2px solid var(--accent);outline-offset:4px;transform:translateY(-4px);}
+  .reco-item:hover{transform:translateY(-4px);}
+  .reco-thumb{position:relative;width:160px;height:96px;border-radius:var(--radius-md);overflow:hidden;background:var(--video-bg);flex-shrink:0;}
+  .reco-thumb svg{width:100%;height:100%;}
+  .reco-item:hover .reco-thumb svg{filter:brightness(1.1);}
+  .reco-duration{
+    position:absolute;bottom:4px;right:4px;
+    background:rgba(0,0,0,0.8);color:#fff;
+    font-size:10px;padding:1px 4px;border-radius:4px;
+  }
+  .reco-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+  .reco-info h4{font-size:14px;font-weight:600;letter-spacing:0.7px;color:var(--heading);margin:0;line-height:1.4;}
+  .reco-channel{font-size:14px;color:var(--body-text);}
+  .reco-meta{font-size:12px;color:var(--muted);}

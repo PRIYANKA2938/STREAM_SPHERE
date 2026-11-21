@@ -1,0 +1,37 @@
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px){
+    main.page{grid-template-columns:1fr;gap:40px;}
+    .sidebar{padding-bottom:0;}
+  }
+  @media (max-width: 768px){
+    .nav-right{gap:16px;}
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+    main.page{padding:24px 16px;gap:40px;}
+    .video-title{font-size:24px;}
+    .personalized-greeting{min-width:0;}
+    .comment-body, .add-comment{gap:14px;}
+    .btn-outline{display:none;}
+    .footer-grid{gap:32px;}
+  }
+  @media (max-width: 480px){
+    .topnav{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      grid-template-areas:"brand actions" "greeting greeting";
+      height:auto;
+      gap:8px;
+      padding:10px 12px;
+    }
+    .nav-left{display:contents;}
+    .brand{grid-area:brand;}
+    .personalized-greeting{grid-area:greeting;}
+    .nav-right{grid-area:actions;gap:8px;}
+    .personalized-greeting strong,.personalized-greeting span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .video-actions{gap:14px;}
+    .comment-headline{gap:8px;}
+    .reco-item{gap:8px;}
+    .reco-thumb{width:120px;height:72px;}
+    textarea.comment-box{min-height:60px;}
+    .add-comment{gap:12px;}
+  }
